@@ -542,21 +542,33 @@ export default function MidiController() {
         {/* MIDI Output */}
         <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
           <button
-            onClick={() => setMidiEnabled(!midiEnabled)}
+            onClick={() => midiSupported && setMidiEnabled(!midiEnabled)}
             style={{
               padding: '6px 10px',
               borderRadius: '6px',
-              border: midiEnabled ? '1px solid #22c55e' : '1px solid #3f3f46',
-              background: midiEnabled ? 'rgba(34, 197, 94, 0.15)' : '#27272a',
-              color: midiEnabled ? '#4ade80' : '#71717a',
-              cursor: 'pointer',
+              border: !midiSupported
+                ? '1px solid #eab308'
+                : midiEnabled
+                ? '1px solid #22c55e'
+                : '1px solid #3f3f46',
+              background: !midiSupported
+                ? 'rgba(234, 179, 8, 0.15)'
+                : midiEnabled
+                ? 'rgba(34, 197, 94, 0.15)'
+                : '#27272a',
+              color: !midiSupported
+                ? '#facc15'
+                : midiEnabled
+                ? '#4ade80'
+                : '#71717a',
+              cursor: midiSupported ? 'pointer' : 'not-allowed',
               fontSize: '10px',
               fontWeight: 600,
               letterSpacing: '1px',
               fontFamily: 'inherit'
             }}
           >
-            MIDI {midiEnabled ? 'ON' : 'OFF'}
+            MIDI {!midiSupported ? '(disabled)' : midiEnabled ? 'ON' : 'OFF'}
           </button>
           
           {midiEnabled && (

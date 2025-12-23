@@ -44,6 +44,8 @@ export default function MidiController() {
   const [selectedMidiOutput, setSelectedMidiOutput] = useState(null);
   const [midiChannel, setMidiChannel] = useState(1);
   const [midiEnabled, setMidiEnabled] = useState(false);
+  const [midiSupported] = useState(() => !!navigator.requestMIDIAccess);
+  const [warningDismissed, setWarningDismissed] = useState(false);
 
   const gridRef = useRef(null);
   const audioContextRef = useRef(null);
@@ -353,6 +355,39 @@ export default function MidiController() {
       fontFamily: "'SF Mono', 'Fira Code', 'Consolas', monospace",
       color: '#e4e4e7'
     }}>
+      {/* Browser Warning */}
+      {!midiSupported && !warningDismissed && (
+        <div style={{
+          background: 'rgba(251, 146, 60, 0.15)',
+          border: '1px solid rgba(251, 146, 60, 0.3)',
+          borderRadius: '8px',
+          padding: '12px 16px',
+          marginBottom: '16px',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'space-between',
+          gap: '12px'
+        }}>
+          <span style={{ fontSize: '13px', color: '#fb923c' }}>
+            Your browser does not support Web MIDI. MIDI output is disabled. Use Chrome or Edge for full functionality.
+          </span>
+          <button
+            onClick={() => setWarningDismissed(true)}
+            style={{
+              background: 'none',
+              border: 'none',
+              color: '#fb923c',
+              cursor: 'pointer',
+              fontSize: '18px',
+              padding: '0 4px',
+              lineHeight: 1
+            }}
+          >
+            ×
+          </button>
+        </div>
+      )}
+
       {/* Header */}
       <header style={{
         display: 'flex',
